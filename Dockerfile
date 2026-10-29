@@ -1,16 +1,27 @@
-FROM node:20-alpine
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-ARG APP_ENV=development
-ENV NODE_ENV=${APP_ENV}
-
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci
 
+COPY tsconfig.json ./
+COPY src ./src
+
+RUN npm run build
+
+FROM node:20-alpine AS production
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm ci --omit=dev
 COPY . .
+COPY --from=build /app/dist ./dist
 
-EXPOSE 5000
+EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
