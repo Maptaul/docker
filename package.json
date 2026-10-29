@@ -1,0 +1,12 @@
+{
+  "name": "Hello docker",
+  "version": "1.0.0",
+  "description": "simple express app to test docker",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
